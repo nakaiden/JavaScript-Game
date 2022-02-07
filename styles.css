@@ -1,0 +1,61 @@
+body{
+    background: black;
+    font-size: 100%;
+}
+
+canvas{
+    position: relative;
+}
+
+.game{
+    position: relative;
+}
+
+.crowd{
+
+}
+
+body .hidden{
+    display: none;
+}
+
+.main-menu{
+    font-family: Verdana;
+    color: yellow;
+    text-shadow: 2px 2px rgb(6, 6, 41);
+    background-image: url('./img/menu_pic.jpg');
+    height: 1000px;
+    background-size: cover;
+    background-position: center;
+    border:2px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    
+    
+    
+}
+
+ul{
+    text-align: justify;
+}
+
+.main-menu-text{
+    margin-top: 400px;
+}
+
+button{
+    font-weight: bold;
+    font-size: 18px;
+    padding: 15px;
+    border-radius: 30px;
+    border: 0;
+    border:2px solid gray;
+    background-color: rgb(6, 6, 41);
+    color: yellow;
+    text-shadow: 2px 2px black;
+    box-shadow: 0 0 10px black;
+    cursor: pointer;
+    
+}
