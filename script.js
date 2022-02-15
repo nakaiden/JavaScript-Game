@@ -168,17 +168,11 @@ class Arrow extends DrawObject{
     y = 580;
     x = 400;
     move(){
-        //this.rotation = (Math.atan2(this.y - mouse.y, mouse.x - this.x) + Math.PI * 2) % Math.PI * 2;
         //find the angle between the mouse and the arrow;
         let radians = Math.atan2(this.y - mouse.y, mouse.x - this.x)
         //make sure that angle is between 0 and 2PI
-        this.rotation = mod(radians + Math.PI / 2, Math.PI * 2) - Math.PI / 2;
-        //debug.innerText = this.rotation //* 180 / Math.PI;
-        if(this.rotation < Math.PI /6){
-            this.rotation = Math.PI /6
-        }else if(this.rotation > 5 * Math.PI / 6){
-            this.rotation = Math.PI * 5 / 6
-        }
+        this.rotation = mod(radians, Math.PI * 2) + Math.PI / 4;
+        
         if(!football.gravity){
 
             football.rotation = this.rotation
