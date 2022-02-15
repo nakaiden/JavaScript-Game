@@ -6,6 +6,8 @@
 const debug = document.querySelector('.debug');
 debug.innerText = 'hello world';
 const canvas = document.querySelector('canvas');
+canvas.x = 0;
+canvas.y = 0;
 const goalPostImg = new Image();
 goalPostImg.src = './img/goalpost.gif'
 const footballImg = new Image();
@@ -15,7 +17,7 @@ arrowImg.src ='./img/arrow.png';
 
 // get the functions for 2d rendering on our canvas
 const ctx = canvas.getContext('2d');
-let x = 50;
+//let x = 50;
 let score = 0;
 debug.innerText = `score: ${score}`;
 
@@ -30,7 +32,6 @@ const canvasRect = canvas.getBoundingClientRect();
 canvas.addEventListener('mousemove', e =>{
     mouse.x = e.clientX - canvasRect.left;
     mouse.y = e.clientY - canvasRect.top;
-    //debug.innerText = `${mouse.x}, ${mouse.y}`;
 });
 
 const FPS = 60;
@@ -137,6 +138,13 @@ class MovingGoal extends DrawObject{
     width = 300;
     height = 400;
     direction = 1
+    goalZone = new DrawObject();
+    constructor(){
+        super()
+        this.goalZone.width = 60;
+        this.goalZone.height = 60;
+        this.goalZone.color = 'yellow';
+    }
     
     move(){
         this.x -=2 * this.direction;
@@ -146,6 +154,9 @@ class MovingGoal extends DrawObject{
         if(this.x > 650){
             this.direction = 1;
         }
+        this.goalZone.x = this.x
+        this.goalZone.y = this.y
+        this.goalZone.draw();
     }
 }
 
@@ -154,7 +165,7 @@ class Arrow extends DrawObject{
     rotation = Math.PI / 2;
     width = 40;
     height = 25;
-    y = 475;
+    y = 580;
     x = 400;
     move(){
         //this.rotation = (Math.atan2(this.y - mouse.y, mouse.x - this.x) + Math.PI * 2) % Math.PI * 2;
@@ -162,12 +173,18 @@ class Arrow extends DrawObject{
         let radians = Math.atan2(this.y - mouse.y, mouse.x - this.x)
         //make sure that angle is between 0 and 2PI
         this.rotation = mod(radians + Math.PI / 2, Math.PI * 2) - Math.PI / 2;
-        debug.innerText = this.rotation //* 180 / Math.PI;
-         if(this.rotation < Math.PI /6){
-             this.rotation = Math.PI /6
-         }else if(this.rotation > 5 * Math.PI / 6){
-             this.rotation = Math.PI * 5 / 6
-         }
+        //debug.innerText = this.rotation //* 180 / Math.PI;
+        if(this.rotation < Math.PI /6){
+            this.rotation = Math.PI /6
+        }else if(this.rotation > 5 * Math.PI / 6){
+            this.rotation = Math.PI * 5 / 6
+        }
+        if(!football.gravity){
+
+            football.rotation = this.rotation
+            football.x = this.x + 100 * Math.cos(this.rotation)
+            football.y = this.y + 100 * Math.sin(-this.rotation)
+        }
         
     }
 }
@@ -176,23 +193,47 @@ class Football extends DrawObject{
     width = 55;
     height = 35;
     x = 400;
-    y = 550;
-    dy = -5;
+    y = 500;
+    //dy = -5;
     rotation = Math.PI / 2;
     speed = 7;
+    reset(){
+        this.x = 400;
+        this.y = 500;
+        this.dx = 0;
+        this.dy = 0;
+        this.gravity = false;
+
+    }
     
     move(){
         this.x += this.dx;
         this.y += this.dy;
-        this.dy += .02;
+        if(this.gravity) this.dy += .02;
         
         //check to see if football is colliding w/ goal post(true/false)
-        if(this.isCollding(movingGoal)){
-            console.log('Score!');
+        if(this.isCollding(movingGoal.goalZone)){
+            score += 3;
+            debug.innerText = `score: ${score}`;
+            this.reset();
 
         }
         // is the football on stage
-        
+        if(!this.isCollding(canvas)){
+            this.reset()
+        }         
+    }
+    kick(){
+          //when we click move football to arrow
+        this.x = arrow.x;
+        this.y = arrow.y;
+        //aim football in same direction as arrow
+        this.rotation = arrow.rotation;
+        //set the footballs velocity based on its rotation
+        this.dx = this.speed * Math.cos(this.rotation)
+        this.dy = this.speed * Math.sin(-this.rotation)
+        this.gravity = true;
+        console.log(mouse.x,mouse.y);
     }
 
 
@@ -266,14 +307,7 @@ const mainMenu = document.querySelector('.main-menu');
 const gameContainer = document.querySelector('.game-container');
 
 canvas.addEventListener('click', () =>{
-    //when we click move football to arrow
-    football.x = arrow.x;
-    football.y = arrow.y;
-    //aim football in same direction as arrow
-    football.rotation = arrow.rotation;
-    //set the footballs velocity based on its rotation
-    football.dx = football.speed * Math.cos(football.rotation)
-    football.dy = football.speed * Math.sin(-football.rotation)
+  football.kick()
     
 });
 

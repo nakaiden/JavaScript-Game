@@ -1,10 +1,19 @@
 body{
-    background: black;
+    background-image: url('./img/playing-field-img.png');
+    height: 1000px;
+    background-size: cover;
+    background-position: center;
+    /* background: black; */
     font-size: 100%;
 }
 
 canvas{
-    position: relative;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 800px;
 }
 
 .game{
@@ -62,4 +71,8 @@ button{
     box-shadow: 0 0 10px black;
     cursor: pointer;
     
+}
+
+.debug{
+    color: white;
 }
