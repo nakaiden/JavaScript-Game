@@ -17,18 +17,23 @@
             <h2>Rules of the game:</h2>
             <ul>
                 <li>Aim the arrow towards the moving goal for direction</li>
-                <li>Set the force of your kick</li>
+                <li>Left click mouse to kick</li>
                 <li>Each goal is worth 3pts</li>
+                <li>See how many points you can score in 60 seconds</li>
+
             </ul>
             <p>Have fun and enjoy!</p>
-            <button>Start Game</button>
+            <button onclick="start()">
+                Start Game
+            </button>
         </div>
     </div>
     <div class="game-container hidden">
 
         <div class="debug"></div>
+        <div id="counter">1:00</div>
         <div class=game>
-            <canvas width=800 height=750></canvas>
+            <canvas width=900 height=1000></canvas>
         </div>
     </div>
 </body>

@@ -1,5 +1,10 @@
-body{
+html,body{
     background-image: url('./img/playing-field-img.png');
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 1000px;
     background-size: cover;
     background-position: center;
@@ -8,7 +13,7 @@ body{
 }
 
 canvas{
-    border: 3px solid red;
+    /* border: 3px solid red; */
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
@@ -21,9 +26,7 @@ canvas{
     position: relative;
 }
 
-.crowd{
 
-}
 
 body .hidden{
     display: none;
@@ -34,6 +37,11 @@ body .hidden{
     color: yellow;
     text-shadow: 2px 2px rgb(6, 6, 41);
     background-image: url('./img/menu_pic.jpg');
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 1000px;
     background-size: cover;
     background-position: center;
@@ -54,9 +62,9 @@ ul{
 
 .main-menu-text{
     margin-top: 400px;
-    background-color: rgba(255, 255, 255, 0.452);
+    background-color: rgba(255, 255, 255, 0.225);
     padding: 16px;
-    border-radius: 5%;
+    border-radius: 2%;
 }
 
 button{
@@ -75,5 +83,13 @@ button{
 }
 
 .debug{
-    color: white;
+    color: rgb(2, 2, 48);
+    font-size: 40px;
+}
+
+#counter{
+    color: red;
+    font-size: 30px;
+    text-shadow: 2px 2px black;
+
 }

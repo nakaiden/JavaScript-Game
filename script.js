@@ -1,8 +1,3 @@
-
-// RAM = Random Access Memory = variables
-// CPU = Central Proccesing Unit = logic execution
-// GPU = Graphics Proccsing Unit = logic for images and image manipulation
-// FPS = Frames Per Second = how fast our game runs
 const debug = document.querySelector('.debug');
 debug.innerText = 'hello world';
 const canvas = document.querySelector('canvas');
@@ -17,9 +12,8 @@ arrowImg.src ='./img/arrow.png';
 
 // get the functions for 2d rendering on our canvas
 const ctx = canvas.getContext('2d');
-//let x = 50;
 let score = 0;
-debug.innerText = `score: ${score}`;
+debug.innerText = `Score: ${score}`;
 
 //this is a global object that keeps track of the mouse position
 const mouse = {
@@ -42,7 +36,7 @@ class DrawObject{
     dy = 0;
     width = 50;
     height = 100;
-    color = 'red';
+    //color = 'red';
     rotation = 0;
 
     draw() {
@@ -92,58 +86,20 @@ class DrawObject{
         this.height + this.y > obj.y
     }
 }
-class Mario extends DrawObject{
-    speed = 3;
-    move(){
-        DrawObject.prototype.move.apply(this);
-        if(this.isCollding(obstacle) && this !== obstacle){
-            this.color = 'purple';
-            obstacle.x = Math.random() * canvas.width;
-            obstacle.y = Math.random() * canvas.height;
-            score++;
-            debug.innerText = `score: ${score}`;
-        } else {
-            this.color = 'red'
-        }
-    }
-}
-class Mario2 extends DrawObject{
-    speed = 3;
-    move(){
-        DrawObject.prototype.move.apply(this);
-        if(this.isCollding(obstacle) && this !== obstacle){
-            this.color = 'purple';
-            obstacle.x = Math.random() * canvas.width;
-            obstacle.y = Math.random() * canvas.height;
-            score++;
-            debug.innerText = `score: ${score}`;
-        } else {
-            this.color = 'yellow'
-        }
-    }
-}
-class Obstacle extends DrawObject{
-    width = 25;
-    height = 25;
-    isCircle = true;
-    color = 'blue';
-    x = 500;
-    y = 400;
-}
-
 
 class MovingGoal extends DrawObject{
     image = goalPostImg;
     x = 400;
+    y = 437;
     width = 300;
     height = 400;
     direction = 1
     goalZone = new DrawObject();
     constructor(){
         super()
-        this.goalZone.width = 60;
-        this.goalZone.height = 60;
-        this.goalZone.color = 'yellow';
+        this.goalZone.width = 75;
+        this.goalZone.height = 195;
+        this.goalZone.color = 'rgba(246, 246, 242, 0.01)';
     }
     
     move(){
@@ -151,11 +107,11 @@ class MovingGoal extends DrawObject{
         if(this.x < 60){
             this.direction = -1;
         }
-        if(this.x > 650){
+        if(this.x > 840){
             this.direction = 1;
         }
-        this.goalZone.x = this.x
-        this.goalZone.y = this.y
+        this.goalZone.x = this.x - 3
+        this.goalZone.y = this.y - 70
         this.goalZone.draw();
     }
 }
@@ -163,9 +119,9 @@ class MovingGoal extends DrawObject{
 class Arrow extends DrawObject{
     image = arrowImg;
     rotation = Math.PI / 2;
-    width = 40;
-    height = 25;
-    y = 580;
+    width = 20;
+    height = 14;
+    y = 755;
     x = 400;
     move(){
         //find the angle between the mouse and the arrow;
@@ -176,24 +132,23 @@ class Arrow extends DrawObject{
         if(!football.gravity){
 
             football.rotation = this.rotation
-            football.x = this.x + 100 * Math.cos(this.rotation)
-            football.y = this.y + 100 * Math.sin(-this.rotation)
+            football.x = this.x + 25 * Math.cos(this.rotation)
+            football.y = this.y + 25 * Math.sin(-this.rotation)
         }
         
     }
 }
 class Football extends DrawObject{
     image = footballImg;
-    width = 55;
-    height = 35;
+    width = 18;
+    height = 13;
     x = 400;
-    y = 500;
-    //dy = -5;
+    y = 750
     rotation = Math.PI / 2;
-    speed = 7;
+    speed = 5;
     reset(){
         this.x = 400;
-        this.y = 500;
+        this.y = 750;
         this.dx = 0;
         this.dy = 0;
         this.gravity = false;
@@ -210,9 +165,10 @@ class Football extends DrawObject{
             score += 3;
             debug.innerText = `score: ${score}`;
             this.reset();
+            
 
         }
-        // is the football on stage
+        // is the football on stage?
         if(!this.isCollding(canvas)){
             this.reset()
         }         
@@ -227,74 +183,26 @@ class Football extends DrawObject{
         this.dx = this.speed * Math.cos(this.rotation)
         this.dy = this.speed * Math.sin(-this.rotation)
         this.gravity = true;
-        console.log(mouse.x,mouse.y);
     }
-
-
-
-    
-  
+ 
 }
-const football = new Football();
+
+
+
+let football = new Football();
 const arrow = new Arrow();
 const movingGoal = new MovingGoal();
-//const mario = new Mario();
-const mario2 = new Mario2();
-mario2.y = 200;
-mario2.x = 13;
-mario2.color = 'yellow';
 
-//const obstacle = new Obstacle();
-// listen for input
-window.addEventListener('keydown', e => {
-    console.log(e);
-    e.preventDefault();
-    if(e.key == 'ArrowRight'){
-        mario.right = true;
-    }
-    if(e.key == 'ArrowLeft'){
-        mario.left = true;
-    }
-    if(e.key == 'ArrowUp'){
-        mario.up = true;
-    }
-    if(e.key == 'ArrowDown'){
-        mario.down = true;
-    }
-});
-window.addEventListener('keyup', e => {
-    console.log(e);
-    e.preventDefault();
-    if(e.key == 'ArrowRight'){
-        mario.right = false;
-    }
-    if(e.key == 'ArrowLeft'){
-        mario.left = false;
-    }
-    if(e.key == 'ArrowUp'){
-        mario.up = false;
-    }
-    if(e.key == 'ArrowDown'){
-        mario.down = false;
-    }
-});
 
 
 
 function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    //console.log('mario was drawn');
-    //mario.draw();
-    //mario2.draw();
-    //obstacle.draw();
     movingGoal.draw();
     football.draw();
     arrow.draw();
-    //console.log(football.dx,football.dy);
     setTimeout(draw, 1000 / FPS);
 }
-
-
 
 const startGameButton = document.querySelector('.main-menu button');
 const mainMenu = document.querySelector('.main-menu');
@@ -305,15 +213,37 @@ canvas.addEventListener('click', () =>{
     
 });
 
-startGameButton.addEventListener('click', () => {
-    //hide the main menu
-    mainMenu.classList.add('hidden');
-    //show the game container
-    gameContainer.classList.remove('hidden');
-    draw();
-});
+
 
 function mod(n, m) {
     return ((n % m) + m) % m;
 }
 
+function countdown() {
+    let seconds = 30;
+    function tick() {
+        var counter = document.getElementById("counter");
+        seconds--;
+        counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
+        if( seconds > 0 ) {
+            setTimeout(tick, 1000);
+        } else {
+            alert("Time's Up!!! Game Over!!!");
+        }
+    }
+    tick();
+}
+
+
+function start(){
+    document.getElementById('counter');
+    countdown();
+}
+
+startGameButton.addEventListener('click', () => {
+    //hide the main menu
+    mainMenu.classList.add('hidden');
+    //show the game container
+    gameContainer.classList.remove('hidden');
+    draw();   
+});
