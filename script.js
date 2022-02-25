@@ -20,10 +20,10 @@ const mouse = {
     x: 0,
     y: 0
 }
-//grabs a rectangle based on the dimensions of the canvas
-const canvasRect = canvas.getBoundingClientRect();
-// when mouse moves over the canvas update the x and y
+// when mouse moves over the canvas update the x and y coordinates
 canvas.addEventListener('mousemove', e =>{
+    //grabs a rectangle based on the dimensions of the canvas
+    const canvasRect = canvas.getBoundingClientRect();
     mouse.x = e.clientX - canvasRect.left;
     mouse.y = e.clientY - canvasRect.top;
 });
@@ -79,7 +79,7 @@ class DrawObject{
             this.y += this.speed;
         }
     }
-    isCollding(obj){
+    isColliding(obj){
         return this.x < obj.x + obj.width &&
         this.x + this.width > obj.x &&
         this.y < obj.y + obj.height &&
@@ -97,7 +97,7 @@ class MovingGoal extends DrawObject{
     goalZone = new DrawObject();
     constructor(){
         super()
-        this.goalZone.width = 75;
+        this.goalZone.width = 80;
         this.goalZone.height = 195;
         this.goalZone.color = 'rgba(246, 246, 242, 0.01)';
     }
@@ -105,10 +105,10 @@ class MovingGoal extends DrawObject{
     move(){
         this.x -=2 * this.direction;
         if(this.x < 60){
-            this.direction = -1;
+            this.direction = -0.9;
         }
         if(this.x > 840){
-            this.direction = 1;
+            this.direction = 0.9;
         }
         this.goalZone.x = this.x - 3
         this.goalZone.y = this.y - 70
@@ -126,8 +126,10 @@ class Arrow extends DrawObject{
     move(){
         //find the angle between the mouse and the arrow;
         let radians = Math.atan2(this.y - mouse.y, mouse.x - this.x)
+
         //make sure that angle is between 0 and 2PI
-        this.rotation = mod(radians, Math.PI * 2) + Math.PI / 4;
+
+        this.rotation = radians// + Math.PI / 4;
         
         if(!football.gravity){
 
@@ -145,7 +147,7 @@ class Football extends DrawObject{
     x = 400;
     y = 750
     rotation = Math.PI / 2;
-    speed = 5;
+    speed = 4;
     reset(){
         this.x = 400;
         this.y = 750;
@@ -161,15 +163,15 @@ class Football extends DrawObject{
         if(this.gravity) this.dy += .02;
         
         //check to see if football is colliding w/ goal post(true/false)
-        if(this.isCollding(movingGoal.goalZone)){
+        if(this.isColliding(movingGoal.goalZone)){
             score += 3;
             debug.innerText = `score: ${score}`;
             this.reset();
             
 
         }
-        // is the football on stage?
-        if(!this.isCollding(canvas)){
+        // is the football on stage? If no reset
+        if(!this.isColliding(canvas)){
             this.reset()
         }         
     }
@@ -207,34 +209,46 @@ function draw(){
 const startGameButton = document.querySelector('.main-menu button');
 const mainMenu = document.querySelector('.main-menu');
 const gameContainer = document.querySelector('.game-container');
-
+const endGame = document.querySelector('.end-game');
+const homeMenuButton = document.querySelector('.home-menu');
 canvas.addEventListener('click', () =>{
   football.kick()
     
 });
 
 
+//function assists with gravity of the football
+// function mod(n, m) {
+//     return ((n % m) + m) % m;
+// }
 
-function mod(n, m) {
-    return ((n % m) + m) % m;
-}
 
+//countdown clock 
 function countdown() {
-    let seconds = 30;
+    let seconds = 10;
     function tick() {
-        var counter = document.getElementById("counter");
+        let counter = document.getElementById("counter");
         seconds--;
         counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
         if( seconds > 0 ) {
             setTimeout(tick, 1000);
         } else {
-            alert("Time's Up!!! Game Over!!!");
-        }
+            //alert("Time's Up!!!"); *previous*
+            //restart button after countdown
+        let button = document.createElement('button')
+        button.innerHTML = 'Restart'
+        button.addEventListener('click', () =>{
+            location.reload()
+        })
+        
+        counter.appendChild(button);
+              
+        }    
     }
     tick();
 }
 
-
+//function to start countdown
 function start(){
     document.getElementById('counter');
     countdown();
@@ -246,4 +260,10 @@ startGameButton.addEventListener('click', () => {
     //show the game container
     gameContainer.classList.remove('hidden');
     draw();   
+});
+
+homeMenuButton.addEventListener('click', () => {
+    //mainMenu.classList.remove('hidden');
+    endGame.classList.add('hidden');
+    gameContainer.classList.add('hidden');
 });

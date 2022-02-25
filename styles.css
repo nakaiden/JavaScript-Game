@@ -93,3 +93,23 @@ button{
     text-shadow: 2px 2px black;
 
 }
+
+.end-game{
+    font-family: Verdana;
+    color: yellow;
+    text-shadow: 2px 2px rgb(6, 6, 41);
+    background-image: url('./img/end-game.png');
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1000px;
+    background-size: cover;
+    background-position: center;
+    border:2px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
